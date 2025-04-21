@@ -1,0 +1,6 @@
+---
+title: "Data Science I: Grocery Prices"
+author: "Carlie Cann, Nolan Dermigny, Kevin Pickelman"
+format: pdf
+editor: visual
+---
