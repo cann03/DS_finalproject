@@ -4,3 +4,39 @@ author: "Carlie Cann, Nolan Dermigny, Kevin Pickelman"
 format: pdf
 editor: visual
 ---
+
+## Introduction:
+
+This project uses data from the U.S. Bureau of Labor Statistics to explore grocery prices over the past 15 years. The goal is to understand how the cost of common food items has changed over time and better understand how inflation affects people's daily lives. Whether you're a student on a budget, a family planning meals, or a policymaker concerned with the cost of living, these changes impact us all.
+
+## Loading the Packages
+
+First, let's load some R packages that may be useful!
+
+```{r}
+#install.packages("tidyverse")
+#install.packages("rvest")
+#install.packages("dplyr")
+library("tidyverse")
+library("rvest")
+library("dplyr")
+
+```
+
+## Loading The Data
+
+Now, we must load the data from the dataset.
+
+```{r}
+
+page <- read_html("Bureau of Labor Statistics Data.html")
+
+white_flour <- page |>
+  html_node("#table0") |>
+  html_table(fill = TRUE)
+ 
+white_flour_clean <- white_flour %>%
+  filter_all(all_vars(. != "" & !is.na(.)))
+
+#should we do this table by table or is there a way to do the all tables? perhaps a for loop or something?
+```
