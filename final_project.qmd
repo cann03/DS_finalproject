@@ -77,10 +77,99 @@ tomato_clean <- tomato %>%
 
 ```{r}
 #Nolan
+page <- read_html("Bureau of Labor Statistics Data.html")
+
+beans <- page |>
+  html_node("#table102") |>
+  html_table(fill = TRUE)
+ 
+beans_clean <- beans %>%
+  filter_all(all_vars(. != "" & !is.na(.)))
+
+sugar <- page |>
+  html_node("#table104") |>
+  html_table(fill = TRUE)
+ 
+sugar_clean <- sugar %>%
+  filter_all(all_vars(. != "" & !is.na(.)))
+
+oranges <- page |>
+  html_node("#table69") |>
+  html_table(fill = TRUE)
+ 
+oranges_clean <- oranges %>%
+  filter_all(all_vars(. != "" & !is.na(.)))
+
+wine <- page |>
+  html_node("#table132") |>
+  html_table(fill = TRUE)
+ 
+wine_clean <- wine %>%
+  filter_all(all_vars(. != "" & !is.na(.)))
+
+utility_gas <- page |>
+  html_node("#table137") |>
+  html_table(fill = TRUE)
+ 
+utility_gas_clean <- utility_gas %>%
+  filter_all(all_vars(. != "" & !is.na(.)))
+
+electric <- page |>
+  html_node("#table135") |>
+  html_table(fill = TRUE)
+ 
+electric_clean <- electric %>%
+  filter_all(all_vars(. != "" & !is.na(.)))
+
+
 ```
 
 ```{r}
 #Kevin
+page <- read_html("Bureau of Labor Statistics Data.html")
+
+bread <- page |>
+  html_node("#table5") |>
+  html_table(fill = TRUE)
+ 
+bread_clean <- bread %>%
+  filter_all(all_vars(. != "" & !is.na(.)))
+
+steaks <- page |>
+  html_node("#table148") |>
+  html_table(fill = TRUE)
+ 
+steaks_clean <- steaks %>%
+  filter_all(all_vars(. != "" & !is.na(.)))
+
+eggs <- page |>
+  html_node("#table55") |>
+  html_table(fill = TRUE)
+ 
+eggs_clean <- eggs %>%
+  filter_all(all_vars(. != "" & !is.na(.)))
+
+chicken_breast <- page |>
+  html_node("#table153") |>
+  html_table(fill = TRUE)
+ 
+chicken_breast_clean <- chicken_breast %>%
+  filter_all(all_vars(. != "" & !is.na(.)))
+
+whole_milk <- page |>
+  html_node("#table57") |>
+  html_table(fill = TRUE)
+ 
+whole_milk_clean <- whole_milk %>%
+  filter_all(all_vars(. != "" & !is.na(.)))
+
+gas <- page |>
+  html_node("#table82") |>
+  html_table(fill = TRUE)
+ 
+gas_clean <- gas %>%
+  filter_all(all_vars(. != "" & !is.na(.)))
+
 ```
 
 ## Analyzing The Data
@@ -97,9 +186,11 @@ sweets <- bind_rows(
   rename(Year = 1, Price = 2) %>%
   mutate(Year = as.integer(Year), Price = as.numeric(Price))
 
-ggplot(sweets, aes(x = Item, y = Price, fill = Item)) +
-  geom_boxplot() +
-  labs(title = "Price Distribution of Sweet Items", y = "Price ($)") +
+
+ggplot(sweets, aes(x = as.numeric(Year), y = as.numeric(Price), color = Item)) +
+  geom_line(size = 1.2) +
+  labs(title = "Price Trends of Sweet Items (2009–2024)",
+       x = "Year", y = "Price (USD)", color = "Item") +
   theme_minimal()
 
 
