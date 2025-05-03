@@ -23,20 +23,92 @@ library("dplyr")
 
 ```
 
-## Loading The Data
+## Loading & Tidying The Data
 
-Now, we must load the data from the dataset.
+Now, we must load and tidy the data from the data set.
 
 ```{r}
-
+#Carlie
 page <- read_html("Bureau of Labor Statistics Data.html")
 
-white_flour <- page |>
-  html_node("#table0") |>
+coffee <- page |>
+  html_node("#table117") |>
   html_table(fill = TRUE)
  
-white_flour_clean <- white_flour %>%
+coffee_clean <- coffee %>%
   filter_all(all_vars(. != "" & !is.na(.)))
 
-#should we do this table by table or is there a way to do the all tables? perhaps a for loop or something?
+ice_cream <- page |>
+  html_node("#table66") |>
+  html_table(fill = TRUE)
+ 
+ice_cream_clean <- ice_cream %>%
+  filter_all(all_vars(. != "" & !is.na(.)))
+
+cookie <- page |>
+  html_node("#table12") |>
+  html_table(fill = TRUE)
+ 
+cookie_clean <- cookie %>%
+  filter_all(all_vars(. != "" & !is.na(.)))
+
+peaches <- page |>
+  html_node("#table74") |>
+  html_table(fill = TRUE)
+ 
+peaches_clean <- peaches %>%
+  filter_all(all_vars(. != "" & !is.na(.)))
+
+white_potatoes <- page |>
+  html_node("#table80") |>
+  html_table(fill = TRUE)
+ 
+white_potatoes_clean <- white_potatoes %>%
+  filter_all(all_vars(. != "" & !is.na(.)))
+
+tomato <- page |>
+  html_node("#table82") |>
+  html_table(fill = TRUE)
+ 
+tomato_clean <- tomato %>%
+  filter_all(all_vars(. != "" & !is.na(.)))
+
+```
+
+```{r}
+#Nolan
+```
+
+```{r}
+#Kevin
+```
+
+## Analyzing The Data
+
+Now, it is time for the fun part... analyzing!
+
+```{r}
+#Carlie
+
+sweets <- bind_rows(
+  ice_cream_clean %>% mutate(Item = "Ice Cream"),
+  cookie_clean %>% mutate(Item = "Cookies")
+) %>%
+  rename(Year = 1, Price = 2) %>%
+  mutate(Year = as.integer(Year), Price = as.numeric(Price))
+
+ggplot(sweets, aes(x = Item, y = Price, fill = Item)) +
+  geom_boxplot() +
+  labs(title = "Price Distribution of Sweet Items", y = "Price ($)") +
+  theme_minimal()
+
+
+```
+
+```{r}
+#Nolan
+```
+
+```{r}
+#Kevin
 ```
