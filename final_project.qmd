@@ -21,6 +21,7 @@ library("tidyverse")
 library("rvest")
 library("dplyr")
 
+
 ```
 
 ## Loading & Tidying The Data
@@ -35,42 +36,42 @@ coffee <- page |>
   html_node("#table117") |>
   html_table(fill = TRUE)
  
-coffee_clean <- coffee %>%
+coffee_clean <- coffee|>
   filter_all(all_vars(. != "" & !is.na(.)))
 
 ice_cream <- page |>
   html_node("#table66") |>
   html_table(fill = TRUE)
  
-ice_cream_clean <- ice_cream %>%
+ice_cream_clean <- ice_cream|>
   filter_all(all_vars(. != "" & !is.na(.)))
 
 cookie <- page |>
   html_node("#table12") |>
   html_table(fill = TRUE)
  
-cookie_clean <- cookie %>%
+cookie_clean <- cookie|>
   filter_all(all_vars(. != "" & !is.na(.)))
 
-peaches <- page |>
-  html_node("#table74") |>
-  html_table(fill = TRUE)
+bananas <- page |>
+  html_node("#table68") |>
+  html_table(fill = TRUE) 
  
-peaches_clean <- peaches %>%
+bananas_clean <- bananas |>
   filter_all(all_vars(. != "" & !is.na(.)))
 
 white_potatoes <- page |>
   html_node("#table80") |>
   html_table(fill = TRUE)
  
-white_potatoes_clean <- white_potatoes %>%
+white_potatoes_clean <- white_potatoes|>
   filter_all(all_vars(. != "" & !is.na(.)))
 
 tomato <- page |>
   html_node("#table82") |>
   html_table(fill = TRUE)
  
-tomato_clean <- tomato %>%
+tomato_clean <- tomato|>
   filter_all(all_vars(. != "" & !is.na(.)))
 
 ```
@@ -83,42 +84,42 @@ beans <- page |>
   html_node("#table102") |>
   html_table(fill = TRUE)
  
-beans_clean <- beans %>%
+beans_clean <- beans|>
   filter_all(all_vars(. != "" & !is.na(.)))
 
 sugar <- page |>
   html_node("#table104") |>
   html_table(fill = TRUE)
  
-sugar_clean <- sugar %>%
+sugar_clean <- sugar|>
   filter_all(all_vars(. != "" & !is.na(.)))
 
 oranges <- page |>
   html_node("#table69") |>
   html_table(fill = TRUE)
  
-oranges_clean <- oranges %>%
+oranges_clean <- oranges|>
   filter_all(all_vars(. != "" & !is.na(.)))
 
 wine <- page |>
   html_node("#table132") |>
   html_table(fill = TRUE)
  
-wine_clean <- wine %>%
+wine_clean <- wine|>
   filter_all(all_vars(. != "" & !is.na(.)))
 
 utility_gas <- page |>
   html_node("#table137") |>
   html_table(fill = TRUE)
  
-utility_gas_clean <- utility_gas %>%
+utility_gas_clean <- utility_gas|>
   filter_all(all_vars(. != "" & !is.na(.)))
 
 electric <- page |>
   html_node("#table135") |>
   html_table(fill = TRUE)
  
-electric_clean <- electric %>%
+electric_clean <- electric|>
   filter_all(all_vars(. != "" & !is.na(.)))
 
 
@@ -132,42 +133,42 @@ bread <- page |>
   html_node("#table5") |>
   html_table(fill = TRUE)
  
-bread_clean <- bread %>%
+bread_clean <- bread|>
   filter_all(all_vars(. != "" & !is.na(.)))
 
 steaks <- page |>
   html_node("#table148") |>
   html_table(fill = TRUE)
  
-steaks_clean <- steaks %>%
+steaks_clean <- steaks|>
   filter_all(all_vars(. != "" & !is.na(.)))
 
 eggs <- page |>
   html_node("#table55") |>
   html_table(fill = TRUE)
  
-eggs_clean <- eggs %>%
+eggs_clean <- eggs|>
   filter_all(all_vars(. != "" & !is.na(.)))
 
 chicken_breast <- page |>
   html_node("#table153") |>
   html_table(fill = TRUE)
  
-chicken_breast_clean <- chicken_breast %>%
+chicken_breast_clean <- chicken_breast|>
   filter_all(all_vars(. != "" & !is.na(.)))
 
 whole_milk <- page |>
-  html_node("#table57") |>
+  html_node("#table58") |>
   html_table(fill = TRUE)
  
-whole_milk_clean <- whole_milk %>%
+whole_milk_clean <- whole_milk|>
   filter_all(all_vars(. != "" & !is.na(.)))
 
 gas <- page |>
-  html_node("#table82") |>
+  html_node("#table145") |>
   html_table(fill = TRUE)
  
-gas_clean <- gas %>%
+gas_clean <- gas|>
   filter_all(all_vars(. != "" & !is.na(.)))
 
 ```
@@ -178,28 +179,158 @@ Now, it is time for the fun part... analyzing!
 
 ```{r}
 #Carlie
+produce <- bind_rows(
+  tomato_clean|> mutate(Item = "Tomato", Category = "Produce"),
+  bananas_clean|> mutate(Item = "Bananas", Category = "Produce"),
+  white_potatoes_clean|> mutate(Item = "Potatoes", Category = "Produce"),
+  oranges_clean|> mutate(Item = "Oranges", Category = "Produce"),
+  beans_clean|> mutate(Item = "Beans", Category = "Produce")
+)
 
-sweets <- bind_rows(
-  ice_cream_clean %>% mutate(Item = "Ice Cream"),
-  cookie_clean %>% mutate(Item = "Cookies")
-) %>%
-  rename(Year = 1, Price = 2) %>%
-  mutate(Year = as.integer(Year), Price = as.numeric(Price))
+meat <- bind_rows(
+  chicken_breast_clean|> mutate(Item = "Chicken Breast", Category = "Meat"),
+  steaks_clean|> mutate(Item = "Steak", Category = "Meat")
+)
 
+dairy <- bind_rows(
+  whole_milk_clean|> mutate(Item = "Milk", Category = "Dairy"),
+  eggs_clean|> mutate(Item = "Eggs", Category = "Dairy")
+)
 
-ggplot(sweets, aes(x = as.numeric(Year), y = as.numeric(Price), color = Item)) +
-  geom_line(size = 1.2) +
-  labs(title = "Price Trends of Sweet Items (2009–2024)",
-       x = "Year", y = "Price (USD)", color = "Item") +
+dessert <- bind_rows(
+  cookie_clean|> mutate(Item = "Cookies", Category = "Dessert"),
+  ice_cream_clean|> mutate(Item = "Ice Cream", Category = "Dairy")
+)
+
+baking <- bind_rows(
+  sugar_clean|> mutate(Item = "Sugar", Category = "Baking"),
+  bread_clean|> mutate(Item = "Bread", Category = "Baking")
+)
+
+beverages <- bind_rows(
+  coffee_clean|> mutate(Item = "Coffee", Category = "Beverages"),
+  wine_clean|> mutate(Item = "Wine", Category = "Beverages")
+)
+
+utilities <- bind_rows(
+  gas_clean|> mutate(Item = "Gas", Category = "Utilities"),
+  electric_clean|> mutate(Item = "Electricity", Category = "Utilities"),
+  utility_gas_clean|> mutate(Item = "Utility Gas", Category = "Utilities")
+)
+
+# Combine all categories
+combined <- bind_rows(produce, meat, dairy, dessert, baking, beverages, utilities)
+
+# Standardize column names and clean data
+colnames(combined)[1:2] <- c("Year", "Price")
+combined <- combined|>
+  filter(!is.na(Year), Year != "")|>
+  filter(!str_detect(Year, "[^0-9]"))|>
+  mutate(Year = as.numeric(Year),
+         Price = as.numeric(Price))
+
+```
+
+```{r}
+summary_table <- combined|>
+  group_by(Category)|>
+  summarise(
+    Average_Price = round(mean(Price, na.rm = TRUE), 2),
+    Min_Price = round(min(Price, na.rm = TRUE), 2),
+    Max_Price = round(max(Price, na.rm = TRUE), 2)
+  )
+
+print(summary_table)
+```
+
+```{r}
+percent_change <- combined|>
+  group_by(Item, Category)|>
+  summarise(
+    Start = first(Price[!is.na(Price)]),
+    End = last(Price[!is.na(Price)]),
+    Change = (End - Start) / Start * 100,
+    .groups = "drop"
+  )
+
+ggplot(percent_change, aes(x = reorder(Item, Change), y = Change, fill = Category)) +
+  geom_col() +
+  coord_flip() +
+  labs(title = "Percent Price Change per Item", x = "Item", y = "Percent Change") +
+  theme_minimal()
+
+```
+
+```{r}
+ggplot(percent_change, aes(x = reorder(Category, Change), y = Change, fill = Category)) +
+  geom_col() +
+  coord_flip() +
+  labs(title = "Percent Price Change per Item", x = "Item", y = "Percent Change") +
+  theme_minimal()
+```
+
+```{r}
+ggplot(subset(combined, Category == "Dairy"), aes(x = Year, y = Price, color = Item)) +
+  geom_line() +
+  labs(title = "Dairy Prices Over Time", x = "Year", y = "Price (USD)") +
+  scale_x_continuous(breaks = seq(min(combined$Year), max(combined$Year), by = 2)) +
   theme_minimal()
 
 
+
 ```
 
 ```{r}
-#Nolan
+ggplot(subset(combined, Category == "Baking"), aes(x = Year, y = Price, color = Item)) +
+  geom_line() +
+  labs(title = "Baking Prices Over Time", x = "Year", y = "Price (USD)") +
+  scale_x_continuous(breaks = seq(min(combined$Year), max(combined$Year), by = 2)) +
+  theme_minimal()
+
 ```
 
 ```{r}
-#Kevin
+
+ggplot(subset(combined, Category == "Beverages"), aes(x = Year, y = Price, color = Item)) +
+  geom_line() +
+  labs(title = "Beverages Prices Over Time", x = "Year", y = "Price (USD)") +
+  scale_x_continuous(breaks = seq(min(combined$Year), max(combined$Year), by = 2)) +
+  theme_minimal()
+
+```
+
+```{r}
+ggplot(subset(combined, Category == "Dessert"), aes(x = Year, y = Price, color = Item)) +
+  geom_line() +
+  labs(title = "Dessert Prices Over Time", x = "Year", y = "Price (USD)") +
+  scale_x_continuous(breaks = seq(min(combined$Year), max(combined$Year), by = 2)) +
+  theme_minimal()
+
+```
+
+```{r}
+ggplot(subset(combined, Category == "Meat"), aes(x = Year, y = Price, color = Item)) +
+  geom_line() +
+  labs(title = "Meat Prices Over Time", x = "Year", y = "Price (USD)") +
+  scale_x_continuous(breaks = seq(min(combined$Year), max(combined$Year), by = 2)) +
+  theme_minimal()
+
+```
+
+```{r}
+ggplot(subset(combined, Category == "Produce"), aes(x = Year, y = Price, color = Item)) +
+  geom_line() +
+  labs(title = "Produce Prices Over Time", x = "Year", y = "Price (USD)") +
+  scale_x_continuous(breaks = seq(min(combined$Year), max(combined$Year), by = 2)) +
+  theme_minimal()
+
+```
+
+```{r}
+ggplot(subset(combined, Category == "Utilities"), aes(x = Year, y = Price, color = Item)) +
+  geom_line() +
+  labs(title = "Utilities Prices Over Time", x = "Year", y = "Price (USD)") +
+  scale_x_continuous(breaks = seq(min(combined$Year), max(combined$Year), by = 2)) +
+  theme_minimal()
+
 ```
