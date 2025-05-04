@@ -268,6 +268,39 @@ ggplot(percent_change, aes(x = reorder(Category, Change), y = Change, fill = Cat
   labs(title = "Percent Price Change per Item", x = "Item", y = "Percent Change") +
   theme_minimal()
 ```
+```{r}
+#Which items have changed less than 25%
+lowChange <- percent_change |>
+  filter(abs(Change) < 24.99)
+
+ggplot(lowChange, aes(x = reorder(Item, Change), y = Change, fill = Category)) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Items with Less than 25% Price Change Over 15 Years",
+    x = "Item",
+    y = "Percent Change"
+  ) +
+  theme_minimal()
+
+```
+
+```{r}
+#Which items have changed more than 25%
+
+highChange <- percent_change |>
+  filter(abs(Change) > 50)
+
+ggplot(highChange, aes(x = reorder(Item, Change), y = Change, fill = Category)) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Items with More than 50% Price Increase Over 15 Years",
+    x = "Item",
+    y = "Percent Change"
+  ) +
+  theme_minimal()
+```
 
 ```{r}
 ggplot(subset(combined, Category == "Dairy"), aes(x = Year, y = Price, color = Item)) +
@@ -276,7 +309,8 @@ ggplot(subset(combined, Category == "Dairy"), aes(x = Year, y = Price, color = I
   scale_x_continuous(breaks = seq(min(combined$Year), max(combined$Year), by = 2)) +
   theme_minimal()
 
-
+# eggs are not dairy
+# new graph below without eggs
 
 ```
 
@@ -305,6 +339,8 @@ ggplot(subset(combined, Category == "Dessert"), aes(x = Year, y = Price, color =
   labs(title = "Dessert Prices Over Time", x = "Year", y = "Price (USD)") +
   scale_x_continuous(breaks = seq(min(combined$Year), max(combined$Year), by = 2)) +
   theme_minimal()
+
+# only showing cookies because ice cream falls under dairy as a category
 
 ```
 
