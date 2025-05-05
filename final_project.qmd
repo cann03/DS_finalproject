@@ -244,6 +244,96 @@ print(summary_table)
 ```
 
 ```{r}
+colnames(eggs_clean) <- eggs_clean[1, ]
+eggs_clean <- eggs_clean[-1, ]
+
+eggs_clean <- eggs_clean |>
+  rename(Year = Year) |>
+  mutate(across(everything(), as.numeric))
+
+eggs_long <- eggs_clean |>
+  pivot_longer(-Year, names_to = "Month", values_to = "Price")
+
+eggs_avg <- eggs_long |>
+  group_by(Year) |>
+  summarize(AveragePrice = mean(Price, na.rm = TRUE))
+
+ggplot(eggs_avg, aes(x = Year, y = AveragePrice)) +
+  geom_line(color = "darkblue", size = 1.2) +
+  labs(title = "Average Monthly Egg Price Per Year",
+       x = "Year", y = "Average Price") +
+  theme_minimal()
+```
+
+```{r}
+#coffee
+colnames(coffee_clean) <- coffee_clean[1, ]
+coffee_clean <- coffee_clean[-1, ]
+
+coffee_clean <- coffee_clean |>
+  rename(Year = Year) |>
+  mutate(across(everything(), as.numeric))
+
+coffee_long <- coffee_clean |>
+  pivot_longer(-Year, names_to = "Month", values_to = "Price")
+
+coffee_avg <- coffee_long |>
+  group_by(Year) |>
+  summarize(AveragePrice = mean(Price, na.rm = TRUE))
+
+#milk
+colnames(whole_milk_clean) <- whole_milk_clean[1, ]
+whole_milk_clean <- whole_milk_clean[-1, ]
+
+whole_milk_clean <- whole_milk_clean |>
+  rename(Year = Year) |>
+  mutate(across(everything(), as.numeric))
+
+whole_milk_long <- whole_milk_clean |>
+  pivot_longer(-Year, names_to = "Month", values_to = "Price")
+
+whole_milk_avg <- whole_milk_long |>
+  group_by(Year) |>
+  summarize(AveragePrice = mean(Price, na.rm = TRUE))
+
+#sugar
+colnames(sugar_clean) <- sugar_clean[1, ]
+sugar_clean <- sugar_clean[-1, ]
+
+sugar_clean <- sugar_clean |>
+  rename(Year = Year) |>
+  mutate(across(everything(), as.numeric))
+
+sugar_long <- sugar_clean |>
+  pivot_longer(-Year, names_to = "Month", values_to = "Price")
+
+sugar_avg <- sugar_long |>
+  group_by(Year) |>
+  summarize(AveragePrice = mean(Price, na.rm = TRUE))
+
+# all together
+coffee_avg <- coffee_avg |> mutate(Product = "Coffee")
+whole_milk_avg <- whole_milk_avg |> mutate(Product = "Milk")
+sugar_avg <- sugar_avg |> mutate(Product = "Sugar")
+
+coffeeMilkSugar <- bind_rows(coffee_avg, whole_milk_avg, sugar_avg)
+
+ggplot(coffeeMilkSugar, aes(x = Year, y = AveragePrice, color = Product)) +
+  geom_line(size = 1) +
+  labs(title = "Average Yearly Prices: Coffee, Milk, Sugar",
+       x = "Year",
+       y = "Average Price",
+       color = "Product") +
+  theme_minimal()
+```
+
+```{r}
+
+
+```
+
+
+```{r}
 percent_change <- combined|>
   group_by(Item, Category)|>
   summarise(
@@ -301,6 +391,7 @@ ggplot(highChange, aes(x = reorder(Item, Change), y = Change, fill = Category)) 
   ) +
   theme_minimal()
 ```
+
 
 ```{r}
 ggplot(subset(combined, Category == "Dairy"), aes(x = Year, y = Price, color = Item)) +
